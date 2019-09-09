@@ -5,6 +5,7 @@ import {Root} from 'native-base';
 
 import Login from './src/Screens/Auth/Login';
 import Register from './src/Screens/Auth/Register';
+import Home from './src/Screens/App/Home';
 
 const AuthStack = createStackNavigator({
   Login:Login,
