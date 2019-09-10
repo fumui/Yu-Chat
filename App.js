@@ -1,11 +1,13 @@
 import { createAppContainer, createSwitchNavigator } from "react-navigation";
 import {createStackNavigator} from "react-navigation-stack";
+import { createMaterialTopTabNavigator } from 'react-navigation-tabs'
 import React from 'react';
 import {Root} from 'native-base';
 
 import Login from './src/Screens/Auth/Login';
 import Register from './src/Screens/Auth/Register';
 import Home from './src/Screens/App/Home';
+import ChatRoom from './src/Screens/App/ChatRoom';
 import Splash from './src/Screens/Splash';
 
 const AuthStack = createStackNavigator({
@@ -15,15 +17,14 @@ const AuthStack = createStackNavigator({
   headerMode:"none",
 })
 
-const AppStack = createStackNavigator({
+const AppTabNavigation = createMaterialTopTabNavigator({
   Home:Home,
-},{
-  headerMode:"none",
+  ChatRoom:ChatRoom
 })
 
 const AppNavigator = createSwitchNavigator({
   Auth:AuthStack,
-  App:AppStack,
+  App:AppTabNavigation,
   SplashScreen:Splash
 },{
   initialRouteName:'SplashScreen',
