@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import {Text, StyleSheet} from 'react-native';
-import { Form, Item, Input, Label, Content, Button, Toast } from 'native-base';
+import { Form, Item, Input, Label, Content, Button, Toast, Icon } from 'native-base';
 import firebase from 'firebase';
 import firebaseConfig from '../../Config/firebase'
+import StackedLabelTextbox from '../../Components/StackedLabelTextbox';
 class Auth extends Component {
   constructor(props){
     super(props)
@@ -53,6 +54,10 @@ class Auth extends Component {
     })
   }
 
+  loginWithGoogle = () =>{
+
+  }
+
   render() {
     return (
       <Content style={styles.root}>
@@ -72,6 +77,11 @@ class Auth extends Component {
             onPress={this.handleSubmit}
             block dark><Text style={styles.formButtonsText}>{this.state.isLoading ? 'Loading':'Sign In'}</Text></Button>
         </Form>
+        {/* <StackedLabelTextbox onChangeText={(text)=>this.handleChange('email',text)} label='Email' placeholder='Email...'/> */}
+        {/* <Button>
+          <Icon type='FontAwesome5' name='home' />
+          <Text>Login With Google</Text>
+        </Button> */}
         <Button 
           style={styles.buttons} 
           onPress={()=>this.props.navigation.navigate('Register')}
@@ -102,7 +112,7 @@ const styles = StyleSheet.create({
     maxWidth:80,
   },
   buttons:{
-    marginTop:10,
+    marginTop:20,
     marginLeft:10,
     fontWeight:'bold',
     maxWidth:80,
