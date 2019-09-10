@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import {Text, StyleSheet} from 'react-native';
 import { Form, Item, Input, Label, Content, Button,  Toast } from 'native-base';
-import firebase from 'firebase';
+import * as firebase from 'firebase/app';
+import 'firebase/firebase-firestore';
 import firebaseConfig from '../../Config/firebase'
 
 class Auth extends Component {
@@ -24,6 +25,16 @@ class Auth extends Component {
           photoURL: "https://firebasestorage.googleapis.com/v0/b/yu-chat.appspot.com/o/User.png?alt=media&token=79e7b969-046c-4657-9558-b65a1812e388"
         })
         .then(() =>{
+          let userData = {
+            uid:user.uid,
+            username:this.state.formData.username,
+            photoURL:"https://firebasestorage.googleapis.com/v0/b/yu-chat.appspot.com/o/User.png?alt=media&token=79e7b969-046c-4657-9558-b65a1812e388",
+          }
+          return firebase.firestore().collection('Users')
+                  .doc(user.uid)
+                  .set(userData)
+        })
+        .then(()=>{
           Toast.show({
             text:`Welcome ${user.displayName}`,
             buttonText: "Okay",

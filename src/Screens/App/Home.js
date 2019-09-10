@@ -6,15 +6,7 @@ import firebaseConfig from '../../Config/firebase';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 
 export default class Home extends React.Component {
-  handleLogout = () => {
-    firebase.auth().signOut()
-      .then(()=>{
-        this.props.navigation.navigate('Login')
-      })
-      .catch(err =>{
-        console.error(err)
-      })
-  }
+  
 
   render(){
     return(

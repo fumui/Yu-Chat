@@ -54,9 +54,9 @@ class Auth extends Component {
     })
   }
 
-  loginWithGoogle = () =>{
+  // loginWithGoogle = () =>{
 
-  }
+  // }
 
   render() {
     return (
