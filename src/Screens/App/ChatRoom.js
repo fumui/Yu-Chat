@@ -10,15 +10,16 @@ export default class ChatRoom extends React.Component{
     super()
     this.state = {
       currentUser: firebase.auth().currentUser,
-      unsubscribe: firebase.firestore().collection('Users').onSnapshot(this.listener),
       users:[],
     }
   }
-
-  listener = (snapshot) => {
-    let users = snapshot.docs.map(doc => doc.get('uid') !== this.state.currentUser.uid ? doc.data():null)
-    this.setState({users})
-  }
+  unsubscribe = firebase
+    .firestore()
+    .collection('Users')
+    .onSnapshot(snapshot => {
+      let users = snapshot.docs.map(doc => doc.get('uid') !== this.state.currentUser.uid ? doc.data():null)
+      this.setState({users})
+    })
 
   render(){
     return (
@@ -46,7 +47,7 @@ export default class ChatRoom extends React.Component{
     )
   }
   componentWillUnmount(){
-    this.state.unsubscribe()
+    this.unsubscribe()
   }
 }
 

@@ -11,54 +11,59 @@ class Auth extends Component {
     this.state = {
       formData:{
         username:'',
+        fullname:'',
         email:'',
         password:'',
       },
       isLoading:false,
       showToast:false
     }
-
-    firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-        user.updateProfile({
-          displayName: this.state.formData.username,
-          photoURL: "https://firebasestorage.googleapis.com/v0/b/yu-chat.appspot.com/o/User.png?alt=media&token=79e7b969-046c-4657-9558-b65a1812e388"
-        })
-        .then(() =>{
-          let userData = {
-            uid:user.uid,
-            username:this.state.formData.username,
-            photoURL:"https://firebasestorage.googleapis.com/v0/b/yu-chat.appspot.com/o/User.png?alt=media&token=79e7b969-046c-4657-9558-b65a1812e388",
-          }
-          return firebase.firestore().collection('Users')
-                  .doc(user.uid)
-                  .set(userData)
-        })
-        .then(()=>{
-          Toast.show({
-            text:`Welcome ${user.displayName}`,
-            buttonText: "Okay",
-            type: "success",
-            position:'top',
-            duration:4000,
-            style:styles.toast
-          })
-          this.props.navigation.navigate('Home')
-        })
-        .catch(err => {
-          Toast.show({
-            text: errorMessage,
-            buttonText: "Okay",
-            type: "danger",
-            position:'top',
-            duration:4000,
-            style:styles.toast
-          })
-          console.log(err)
-        });
-      }
-    });
   }
+  unsub = firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      user.updateProfile({
+        displayName: this.state.formData.username,
+        photoURL: "https://firebasestorage.googleapis.com/v0/b/yu-chat.appspot.com/o/User.png?alt=media&token=79e7b969-046c-4657-9558-b65a1812e388"
+      })
+      .then(() =>{
+        let userData = {
+          uid:user.uid,
+          username:this.state.formData.username,
+          fullname:this.state.formData.fullname,
+          photoURL:"https://firebasestorage.googleapis.com/v0/b/yu-chat.appspot.com/o/User.png?alt=media&token=79e7b969-046c-4657-9558-b65a1812e388",
+        }
+        firebase.firestore().collection('Users')
+                .doc(user.uid)
+                .set(userData)
+                .then(()=>{
+                  this.setState({isLoading:false})
+                  Toast.show({
+                    text:`Welcome ${this.state.formData.username}`,
+                    buttonText: "Okay",
+                    type: "success",
+                    position:'top',
+                    duration:4000,
+                    style:styles.toast
+                  })
+                  this.props.navigation.navigate('Home')
+                  this.unsub()
+                })
+      })
+      .catch(err => {
+        this.setState({isLoading:false})
+        Toast.show({
+          text: errorMessage,
+          buttonText: "Okay",
+          type: "danger",
+          position:'top',
+          duration:4000,
+          style:styles.toast
+        })
+        console.log(err)
+        this.unsub()
+      });
+    }
+  });
 
   handleChange= (name,value) => {
     let newFormData = {...this.state.formData}
@@ -69,7 +74,7 @@ class Auth extends Component {
   }
 
   handleSubmit = () => {
-    
+    this.setState({isLoading:true})
     firebase.firestore()
       .collection('Users')
       .where("username","==",this.state.formData.username)
@@ -79,6 +84,7 @@ class Auth extends Component {
           this.signUp(this.state.formData.email, this.state.formData.password)
         }else{
           console.warn('Username already existed')
+          this.setState({isLoading:false})
           Toast.show({
             text: 'Username already existed',
             buttonText: "Okay",
@@ -113,6 +119,10 @@ class Auth extends Component {
       <Content contentContainerStyle={styles.root}>
         <Text style={styles.welcomeText}>Welcome to Yu Chat</Text>
         <Form style={styles.form}>
+          <Item floatingLabel>
+            <Label>Full Name</Label>
+            <Input  onChangeText={(text)=>this.handleChange('fullname',text)}  textContentType="name"/>
+          </Item>
           <Item floatingLabel>
             <Label>Username</Label>
             <Input  onChangeText={(text)=>this.handleChange('username',text)}  textContentType="username"/>

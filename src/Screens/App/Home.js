@@ -1,6 +1,6 @@
 import React from 'react';
-import {Text, StyleSheet, PermissionsAndroid, Dimensions} from 'react-native';
-import { Button, View } from 'native-base';
+import {Text, StyleSheet,Image, PermissionsAndroid, Dimensions} from 'react-native';
+import { Button, View  } from 'native-base';
 import MapView, {PROVIDER_GOOGLE, Circle, Marker} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import firebase from 'firebase';
@@ -9,8 +9,8 @@ import firebaseConfig from '../../Config/firebase';
 export default class Home extends React.Component {
   constructor(){
     super()
-    Dimensions.addEventListener("change", this.handler);
     this.state = {
+      users:[],
       region : {
         latitude: -7.78825,
         longitude: 110.4324,
@@ -21,10 +21,19 @@ export default class Home extends React.Component {
       currentUser: firebase.auth().currentUser
     }
   }
-  handler = dims => this.setState(dims);
-  
+  unsubscribeFriendLocation = firebase
+    .firestore()
+    .collection('Users')
+    .onSnapshot((snapshot) => {
+    let users = []
+    snapshot.forEach(doc => {
+      users.push( doc.data() )
+    })
+    this.setState({users})
+  })
   componentWillUnmount() {
-    Dimensions.removeEventListener("change", this.handler);
+    this.unsubscribeFriendLocation()
+    Geolocation.stopObserving();
   }
   componentDidMount = async () => {
     let hasLocationPermission = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)
@@ -90,6 +99,20 @@ export default class Home extends React.Component {
             showsUserLocation={true}
             followsUserLocation={true}
           >
+            {this.state.users.map(user => {
+              return (
+                <Marker 
+                  title={user.username}
+                  description={user.fullname}
+                  coordinate={user.LatLng}
+                  onCalloutPress={()=>{this.props.navigation.navigate('Chat', {targetUID:user.uid})}}
+                >
+                  <View>
+                    <Image source={{uri:user.photoURL}} style={{width:40,height:40}} />
+                  </View>
+                </Marker>
+              )
+            })}
           </MapView>
         </View>
       </View>

@@ -6,10 +6,6 @@ import 'firebase/auth';
 import firebaseConfig from '../../Config/firebase'
 
 export default class Chat extends React.Component {
-  state = {
-    messages: [],
-  }
-
   constructor(props){
     super(props)
     let currentUser = firebase.auth().currentUser
@@ -25,6 +21,7 @@ export default class Chat extends React.Component {
                                 .collection(targetUID + currentUser.uid)
 
     this.state = {
+      messages: [],
       currentUser ,
       targetChatRef,
       originChatRef,
@@ -53,12 +50,18 @@ export default class Chat extends React.Component {
   onSend(messages = []) {
     this.state.targetChatRef.doc(messages[0]._id).set(messages[0])
   }
+  
+  openFriendProfile = () => {
+    const friendUID = this.props.navigation.getParam('targetUID')
+    this.props.navigation.navigate('Profile', {userID:friendUID})
+  }
 
   render() {
     return (
       <GiftedChat
         messages={this.state.messages}
         onSend={messages => this.onSend(messages)}
+        onPressAvatar={this.openFriendProfile}
         user={{
           _id: this.state.currentUser.uid,
           name: this.state.currentUser.displayName,

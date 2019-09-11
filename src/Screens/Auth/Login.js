@@ -5,6 +5,7 @@ import firebase from 'firebase';
 import firebaseConfig from '../../Config/firebase'
 import StackedLabelTextbox from '../../Components/StackedLabelTextbox';
 class Auth extends Component {
+  
   constructor(props){
     super(props)
     this.state = {
@@ -15,20 +16,22 @@ class Auth extends Component {
       isLoading:false,
       showToast:false
     }
-
-    firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-        Toast.show({
-          text:`Welcome ${user.displayName}`,
-          buttonText: "Okay",
-          type: "success",
-          position:'top',
-          duration:4000,
-          style:styles.toast
-        })
-        this.props.navigation.navigate('Home')
-      }
-    });
+  }
+  unsub = firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      Toast.show({
+        text:`Welcome ${user.displayName}`,
+        buttonText: "Okay",
+        type: "success",
+        position:'top',
+        duration:4000,
+        style:styles.toast
+      })
+      this.props.navigation.navigate('Home')
+    }
+  });
+  componentWillUnmount(){
+    this.unsub()
   }
   
   handleChange= (name,value) => {
@@ -54,9 +57,10 @@ class Auth extends Component {
     })
   }
 
-  // loginWithGoogle = () =>{
-
-  // }
+  handleSignUp = ()=>{
+    this.unsub()
+    this.props.navigation.navigate('Register')
+  }
 
   render() {
     return (
@@ -77,14 +81,9 @@ class Auth extends Component {
             onPress={this.handleSubmit}
             block dark><Text style={styles.formButtonsText}>{this.state.isLoading ? 'Loading':'Sign In'}</Text></Button>
         </Form>
-        {/* <StackedLabelTextbox onChangeText={(text)=>this.handleChange('email',text)} label='Email' placeholder='Email...'/> */}
-        {/* <Button>
-          <Icon type='FontAwesome5' name='home' />
-          <Text>Login With Google</Text>
-        </Button> */}
         <Button 
           style={styles.buttons} 
-          onPress={()=>this.props.navigation.navigate('Register')}
+          onPress={this.handleSignUp}
           transparent light><Text style={styles.buttonsText}>Sign Up</Text></Button>
       </Content>
     );
