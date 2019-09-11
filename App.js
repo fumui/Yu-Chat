@@ -34,7 +34,8 @@ const AppTabNavigation = createMaterialTopTabNavigator({
 
 const AppStack = createStackNavigator({
   AppTabNavigation:AppTabNavigation,
-  Chat:Chat
+  Chat:Chat,
+  FriendProfile:Profile,
 },{
   headerMode:"none",
 })
