@@ -58,7 +58,6 @@ class Auth extends Component {
         });
       }
     });
-
   }
 
   handleChange= (name,value) => {
@@ -70,8 +69,32 @@ class Auth extends Component {
   }
 
   handleSubmit = () => {
+    
+    firebase.firestore()
+      .collection('Users')
+      .where("username","==",this.state.formData.username)
+      .get()
+      .then(value => {
+        if(value.empty){
+          this.signUp(this.state.formData.email, this.state.formData.password)
+        }else{
+          console.warn('Username already existed')
+          Toast.show({
+            text: 'Username already existed',
+            buttonText: "Okay",
+            type: "danger",
+            position:'top',
+            duration:4000,
+            style:styles.toast
+          })
+        }
+      })
+    
+  }
+
+  signUp = (email, password) => {
     firebase.auth()
-      .createUserWithEmailAndPassword(this.state.formData.email, this.state.formData.password)
+      .createUserWithEmailAndPassword(email, password)
       .catch(err => {
         let errorMessage = err.code == 'auth/weak-password' ? 'The password is too weak.': err.message;
         Toast.show({
@@ -85,7 +108,6 @@ class Auth extends Component {
         console.log(err)
       })
   }
-
   render() {
     return (
       <Content contentContainerStyle={styles.root}>
