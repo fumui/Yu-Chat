@@ -30,6 +30,7 @@ class Auth extends Component {
           uid:user.uid,
           username:this.state.formData.username,
           fullname:this.state.formData.fullname,
+          email:this.state.formData.email,
           photoURL:"https://firebasestorage.googleapis.com/v0/b/yu-chat.appspot.com/o/User.png?alt=media&token=79e7b969-046c-4657-9558-b65a1812e388",
         }
         firebase.firestore().collection('Users')
