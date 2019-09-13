@@ -28,6 +28,10 @@ class Auth extends Component {
       .then(() =>{
         let userData = {
           uid:user.uid,
+          LatLng:{
+            latitude:null,
+            longitude:null
+          },
           username:this.state.formData.username,
           fullname:this.state.formData.fullname,
           email:this.state.formData.email,

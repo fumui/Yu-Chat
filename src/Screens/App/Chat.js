@@ -12,7 +12,7 @@ export default class Chat extends React.Component {
     super(props)
     let currentUser = firebase.auth().currentUser
     let targetUID = props.navigation.getParam('targetUID')
-
+    
     let originChatRef = firebase.firestore()
                                 .collection('Messages')
                                 .doc('Chats')

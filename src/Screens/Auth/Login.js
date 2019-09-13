@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import {Text, StyleSheet} from 'react-native';
 import { Form, Item, Input, Label, Content, Button, Toast, Icon } from 'native-base';
-import firebase from 'firebase';
+import * as firebase from 'firebase';
+import 'firebase/firebase-firestore';
 import firebaseConfig from '../../Config/firebase'
 import StackedLabelTextbox from '../../Components/StackedLabelTextbox';
 class Auth extends Component {
   
   constructor(props){
+
     super(props)
     this.state = {
       formData:{
