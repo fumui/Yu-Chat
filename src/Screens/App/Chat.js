@@ -24,19 +24,13 @@ export default class Chat extends React.Component {
 
     this.state = {
       messages: [],
-      targetUser:{},
+      targetUser:props.navigation.getParam('userData'),
       currentUser ,
       targetChatRef,
       originChatRef,
       unsubscribeTargetChat: targetChatRef.onSnapshot(this.chatListener),
       unsubscribeOriginChat: originChatRef.onSnapshot(this.chatListener),
     }
-
-    firebase.firestore()
-      .collection('Users')
-      .doc(targetUID)
-      .get()
-      .then(doc => this.setState({targetUser:doc.data()}))
   }
 
   chatListener = (snapshot) => {
@@ -61,7 +55,7 @@ export default class Chat extends React.Component {
   
   openFriendProfile = () => {
     const friendUID = this.props.navigation.getParam('targetUID')
-    this.props.navigation.navigate('FriendProfile', {userID:friendUID})
+    this.props.navigation.navigate('FriendProfile', {userID:friendUID, userData:this.state.targetUser})
   }
 
   render() {

@@ -32,10 +32,10 @@ export default class ChatRoom extends React.Component{
               <Image
                 source={{uri:item.photoURL}}
                 style={styles.avatarImageStyle}
-                onPress={()=>{this.props.navigation.navigate('FriendProfile', {userID:item.uid})}} 
+                onPress={()=>{this.props.navigation.navigate('FriendProfile', {userID:item.uid, userData:item})}} 
               />
               <View style={styles.contentColor}>
-                <Text onPress={()=>{this.props.navigation.navigate('Chat', {targetUID:item.uid})}}  style={styles.rowText}>{item.username}</Text>
+                <Text onPress={()=>{this.props.navigation.navigate('Chat', {targetUID:item.uid, userData:item})}}  style={styles.rowText}>{item.username}</Text>
               </View>
           </TouchableNativeFeedback>
           :<View></View>

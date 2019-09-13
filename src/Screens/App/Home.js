@@ -21,20 +21,24 @@ export default class Home extends React.Component {
       currentUser: firebase.auth().currentUser
     }
   }
+  
   unsubscribeFriendLocation = firebase
     .firestore()
     .collection('Users')
     .onSnapshot((snapshot) => {
     let users = []
     snapshot.forEach(doc => {
-      users.push( doc.data() )
+      if(doc.data().uid != this.state.currentUser.uid)
+        users.push( doc.data() )
     })
     this.setState({users})
   })
+
   componentWillUnmount() {
     this.unsubscribeFriendLocation()
     Geolocation.stopObserving();
   }
+
   componentDidMount = async () => {
     let hasLocationPermission = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)
     if(!hasLocationPermission){
@@ -107,7 +111,7 @@ export default class Home extends React.Component {
                     title={user.username}
                     description={user.fullname}
                     coordinate={user.LatLng}
-                    onCalloutPress={()=>{this.props.navigation.navigate('Chat', {targetUID:user.uid})}}
+                    onCalloutPress={()=>{this.props.navigation.navigate('Chat', {targetUID:user.uid, userData:user})}}
                   >
                     <View>
                       <Image source={{uri:user.photoURL}} style={{width:40,height:40, borderRadius:40}} />
