@@ -55,7 +55,7 @@ export default class Home extends React.Component {
         (error) => {
             console.warn(error.code, error.message);
         },
-        { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+        { showLocationDialog: true ,enableHighAccuracy: true,distanceFilter:1, fastestInterval:5000, timeout: 15000, maximumAge: 10000 }
       );
     }
   }
@@ -100,18 +100,23 @@ export default class Home extends React.Component {
             followsUserLocation={true}
           >
             {this.state.users.map(user => {
-              return (
-                <Marker 
-                  title={user.username}
-                  description={user.fullname}
-                  coordinate={user.LatLng}
-                  onCalloutPress={()=>{this.props.navigation.navigate('Chat', {targetUID:user.uid})}}
-                >
-                  <View>
-                    <Image source={{uri:user.photoURL}} style={{width:40,height:40}} />
-                  </View>
-                </Marker>
-              )
+              if(user.LatLng.latitude !== null){
+                return (
+                  <Marker 
+                    key={''+user.LatLng.latitude+user.LatLng.longitude }
+                    title={user.username}
+                    description={user.fullname}
+                    coordinate={user.LatLng}
+                    onCalloutPress={()=>{this.props.navigation.navigate('Chat', {targetUID:user.uid})}}
+                  >
+                    <View>
+                      <Image source={{uri:user.photoURL}} style={{width:40,height:40, borderRadius:40}} />
+                    </View>
+                  </Marker>
+                )
+              }else {
+                return <View/>
+              }
             })}
           </MapView>
         </View>

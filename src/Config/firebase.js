@@ -8,7 +8,7 @@ class FirebaseSvc {
         authDomain: "yu-chat.firebaseapp.com",
         databaseURL: "https://yu-chat.firebaseio.com",
         projectId: "yu-chat",
-        storageBucket: "",
+        storageBucket: "yu-chat.appspot.com",
         messagingSenderId: "641806802242",
         appId: "1:641806802242:web:985b739dd471f6826ffcdb"
       });
