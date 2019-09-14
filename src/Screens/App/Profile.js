@@ -64,15 +64,7 @@ export default class ChatRoom extends React.Component{
           })
           .then(downloadURL => {
             console.warn('File available at', downloadURL);
-            let currentUser = firebase.auth().currentUser
             photoURL = downloadURL
-            return Promise.all([
-              currentUser.updateProfile({photoURL:downloadURL}), 
-              firebase.firestore().collection('Users').doc(currentUser.uid).update({photoURL:downloadURL})
-            ])
-          })
-          .then(()=>{
-            console.warn('profile image updated');
             this.setState({
               user:{
                 ...this.state.user,
@@ -80,6 +72,11 @@ export default class ChatRoom extends React.Component{
               },
               uploadingImage:false,
             })
+            let currentUser = firebase.auth().currentUser
+            return Promise.all([
+              firebase.firestore().collection('Users').doc(currentUser.uid).update({photoURL}),
+              currentUser.updateProfile({photoURL})
+            ])
           })
           .catch(err=>{
             Toast.show({
@@ -205,14 +202,14 @@ export default class ChatRoom extends React.Component{
         firebase.firestore()
           .collection('Users')
           .doc(this.state.user.uid)
-          .update(this.state.updatedData)
+          .update(updatedData)
           .then(()=>{
             this.setState({
               editingProfile:false, 
               isLoading:false,
               user:{
                 ...this.state.user,
-                ...this.state.updatedData
+                ...updatedData
               }
             })
           })

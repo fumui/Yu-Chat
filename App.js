@@ -9,7 +9,6 @@ import Register from './src/Screens/Auth/Register';
 import Home from './src/Screens/App/Home';
 import ChatRoom from './src/Screens/App/ChatRoom';
 import Profile from './src/Screens/App/Profile';
-import Splash from './src/Screens/Splash';
 import Chat from "./src/Screens/App/Chat";
 
 const AuthStack = createStackNavigator({
@@ -43,7 +42,6 @@ const AppStack = createStackNavigator({
 const AppNavigator = createSwitchNavigator({
   Auth:AuthStack,
   App:AppStack,
-  SplashScreen:Splash
 },{
   initialRouteName:'Auth',
 });
