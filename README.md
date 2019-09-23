@@ -1,4 +1,4 @@
-# HotBook 
+# Yu Chat
 ## Description
   React native chat app with user location tracking. users can explore, search and chat with another user with ease. User can also upload their own profile image. 
   
