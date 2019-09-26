@@ -6,11 +6,17 @@
   - [Node JS](https://nodejs.org/en/)
   - [React Native](https://facebook.github.io/react-native/)
 
+## Requirements
+* [`yarn`](https://yarnpkg.com/en/docs/getting-started) 
+* [`react-native`](https://facebook.github.io/react-native/docs/getting-started)
+* [`react-native-cli`](https://facebook.github.io/react-native/docs/getting-started)
+
 ## How to Install
 1. Download this Project or you can type ``` git clone https://github.com/IndBrony/Yu-Chat.git ```
 2. Open app's directory in CMD or Terminal
 3. Type ` npm install ` or ` yarn install `
-4. Type ` react-native run-android `
+4. Connect your android device to your PC and make sure USB Debugging is enabled
+5. Type ` react-native run-android `
 
 ## Screenhots
 | Home User     | Chat         | Profile User |
